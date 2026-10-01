@@ -1,3 +1,11 @@
+const SUPABASE_URL = "https://dcawlrvlbpwzausfavxj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_4K1eMKWWO27oDN8JLL5Mzw_tYdG4IT1";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
 let transactions =
     JSON.parse(localStorage.getItem("transactions")) || [];
 
@@ -33,7 +41,7 @@ function formatRupiah(number) {
 }
 
 
-function addTransaction() {
+async function addTransaction() {
 
     const description =
         document.getElementById("description").value;
@@ -83,6 +91,26 @@ const transaction = {
     verified: false
 };
 
+
+    const { data, error } = await supabaseClient
+    .from("transactions")
+    .insert([
+        {
+            trust_id: transaction.trustId,
+            description: transaction.description,
+            amount: transaction.amount,
+            type: transaction.type,
+            method: transaction.method,
+            timestamp: transaction.timestamp,
+            verified: transaction.verified
+        }
+    ]);
+
+    if (error) {
+    console.error("Gagal menyimpan ke Supabase:", error);
+    alert("Transaksi gagal disimpan ke database.");
+    return;
+    }
 
     transactions.push(transaction);
 
