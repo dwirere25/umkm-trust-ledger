@@ -59,24 +59,29 @@ function addTransaction() {
     }
 
 
-    const transaction = {
+    const now = new Date();
 
-        id: Date.now(),
+const transaction = {
+    id: Date.now(),
 
-        description,
+    trustId:
+        "TRX-" +
+        now.getFullYear() +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        String(now.getDate()).padStart(2, "0") +
+        "-" +
+        String(transactions.length + 1).padStart(3, "0"),
 
-        amount,
+    description,
+    amount,
+    type,
+    method,
 
-        type,
+    timestamp:
+        now.toISOString(),
 
-        method,
-
-        timestamp:
-            new Date().toISOString(),
-
-        verified: false
-
-    };
+    verified: false
+};
 
 
     transactions.push(transaction);
@@ -149,7 +154,7 @@ function verifyAll() {
         const blockData = {
 
             transactionId:
-                transaction.id,
+                transaction.trustId || transaction.id,
 
             description:
                 transaction.description,
@@ -296,15 +301,22 @@ function renderTransactions() {
 
 
                     ${
-                        transaction.verified
+                     transaction.verified
+                     ?
+                     `
+                     <div class="verified-label">
+                     ✓ Verified
+                     </div>
 
-                        ?
-
-                        '<div class="verified-label">✓ Verified</div>'
-
-                        :
-
-                        ""
+                     <button
+                         class="detail-button"
+                         onclick="showVerification('${transaction.trustId || transaction.id}')"
+                     >
+                      🔍 Lihat Detail
+                     </button>
+                     `
+                     :
+                     ""
                     }
 
                 </div>
@@ -392,6 +404,118 @@ function renderBlockchain() {
 
 }
 
+function showVerification(transactionId) {
+
+    const transaction = transactions.find(
+        transaction =>
+            String(transaction.trustId || transaction.id) ===
+            String(transactionId)
+    );
+
+    if (!transaction) {
+        alert("Data transaksi tidak ditemukan.");
+        return;
+    }
+
+    const block = blockchain.find(
+        block =>
+            String(block.data.transactionId) ===
+            String(transaction.trustId || transaction.id)
+    );
+
+    if (!block) {
+        alert("Data blockchain untuk transaksi ini belum ditemukan.");
+        return;
+    }
+
+    document.getElementById("verificationContent").innerHTML = `
+        <div class="verification-card">
+
+            <div class="verification-header">
+                <span>🔐</span>
+                <div>
+                    <h2>Digital Verification</h2>
+                    <p>UMKM Trust Ledger</p>
+                </div>
+            </div>
+
+            <div class="verification-status">
+                ✓ DATA VERIFIED
+            </div>
+
+            <div class="verification-row">
+                <span>Transaction ID</span>
+                <strong>
+                    ${transaction.trustId || transaction.id}
+                </strong>
+            </div>
+
+            <div class="verification-row">
+                <span>Transaksi</span>
+                <strong>
+                    ${transaction.description}
+                </strong>
+            </div>
+
+            <div class="verification-row">
+                <span>Nominal</span>
+                <strong>
+                    ${formatRupiah(transaction.amount)}
+                </strong>
+            </div>
+
+            <div class="verification-row">
+                <span>Metode</span>
+                <strong>
+                    ${transaction.method}
+                </strong>
+            </div>
+
+            <div class="verification-row">
+                <span>Block</span>
+                <strong>
+                    #${block.index}
+                </strong>
+            </div>
+
+            <div class="verification-row">
+                <span>Hash</span>
+                <strong class="verification-hash">
+                    ${block.hash}
+                </strong>
+            </div>
+
+            <div class="verification-row">
+                <span>Previous Hash</span>
+                <strong class="verification-hash">
+                    ${block.previousHash}
+                </strong>
+            </div>
+
+            <div class="verification-row">
+                <span>Timestamp</span>
+                <strong>
+                    ${new Date(
+                        transaction.timestamp
+                    ).toLocaleString("id-ID")}
+                </strong>
+            </div>
+
+        </div>
+    `;
+
+    document
+        .getElementById("verificationModal")
+        .classList.add("active");
+}
+
+function closeVerification() {
+
+    document
+        .getElementById("verificationModal")
+        .classList.remove("active");
+
+}
 
 function updateDashboard() {
 
