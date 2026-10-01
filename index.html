@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>UMKM Trust Ledger</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        <span class="logo">🔐</span>
+
+        <div>
+            <h1>UMKM Trust Ledger</h1>
+            <p>Trusted Digital Business Record</p>
+        </div>
+    </div>
+</header>
+
+
+<main>
+
+    <!-- DASHBOARD -->
+
+    <section class="dashboard">
+
+        <div class="welcome">
+            <p>Selamat datang 👋</p>
+            <h2>Kelola usaha dengan data yang lebih terpercaya.</h2>
+        </div>
+
+
+        <div class="cards">
+
+            <div class="card">
+                <span>Total Pemasukan</span>
+                <strong id="income">Rp0</strong>
+            </div>
+
+            <div class="card">
+                <span>Total Pengeluaran</span>
+                <strong id="expense">Rp0</strong>
+            </div>
+
+            <div class="card">
+                <span>Saldo</span>
+                <strong id="balance">Rp0</strong>
+            </div>
+
+            <div class="card verified">
+                <span>Verified Records</span>
+                <strong id="verifiedCount">0</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- INPUT TRANSAKSI -->
+
+    <section class="panel">
+
+        <h2>Tambah Transaksi</h2>
+
+        <div class="form">
+
+            <input
+                type="text"
+                id="description"
+                placeholder="Nama transaksi"
+            >
+
+            <input
+                type="number"
+                id="amount"
+                placeholder="Nominal"
+            >
+
+            <select id="type">
+
+                <option value="income">
+                    Pemasukan
+                </option>
+
+                <option value="expense">
+                    Pengeluaran
+                </option>
+
+            </select>
+
+            <select id="method">
+
+                <option value="QRIS">
+                    QRIS
+                </option>
+
+                <option value="Tunai">
+                    Tunai
+                </option>
+
+            </select>
+
+            <button onclick="addTransaction()">
+                + Tambah Transaksi
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- TRANSAKSI -->
+
+    <section class="panel">
+
+        <div class="section-title">
+
+            <h2>Riwayat Transaksi</h2>
+
+            <button onclick="verifyAll()">
+                🔐 Verifikasi Data
+            </button>
+
+        </div>
+
+
+        <div id="transactionList">
+
+            <p class="empty">
+                Belum ada transaksi.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- BLOCKCHAIN -->
+
+    <section class="panel blockchain-panel">
+
+        <h2>⛓️ Blockchain Verification</h2>
+
+        <p class="description">
+
+            Data transaksi yang telah diverifikasi menghasilkan
+            fingerprint digital (hash) sebagai identitas data.
+
+        </p>
+
+
+        <div id="blockchainList">
+
+            <p class="empty">
+                Belum ada data terverifikasi.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- WHATSAPP -->
+
+    <section class="share">
+
+        <h2>Bagikan Rekam Usaha</h2>
+
+        <p>
+            Bagikan informasi sistem kepada mitra atau pihak terkait.
+        </p>
+
+        <button onclick="shareWhatsApp()">
+            📱 Bagikan ke WhatsApp
+        </button>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    <p>
+        UMKM Trust Ledger © 2026
+    </p>
+
+    <small>
+        Digital Accounting + Blockchain Verification
+    </small>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
